@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">SolaceInbox</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="inbox">Inbox</string>
+    <string name="draft">Draft</string>
+    <string name="archive">Archive</string>
+    <string name="deleted">Deleted</string>
+    <string name="junk">Junk</string>
+    <string name="sent">Sent</string>
+    <string name="navigation_drawer_open">Open Nav drawer</string>
+    <string name="navigation_drawer_close">Close Nav Drawer</string>
+    <string name="tagline">Connecting Minds, Driving Progress</string>
+    <string name="attach_file">Attech file</string>
+    <string name="take_picture">Take Picture</string>
+</resources>

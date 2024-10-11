@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/inbox"
+        android:icon="@drawable/baseline_email_24"
+        android:title="@string/inbox"
+
+        />
+    <item
+        android:id="@+id/draft"
+        android:icon="@drawable/baseline_drafts_24"
+        android:title="@string/draft"
+
+        />
+    <item
+        android:id="@+id/archive"
+        android:icon="@drawable/baseline_archive_24"
+        android:title="@string/archive"
+
+        />
+    <item
+        android:id="@+id/deleted"
+        android:icon="@drawable/baseline_delete_24"
+        android:title="@string/deleted"
+
+        />
+    <item
+        android:id="@+id/junk"
+        android:icon="@drawable/junk_icon"
+        android:title="@string/junk"
+        android:visible="false"
+
+        />
+    <item
+        android:id="@+id/sent"
+        android:icon="@drawable/send_icon"
+        android:title="@string/sent"
+
+        />
+
+</menu>

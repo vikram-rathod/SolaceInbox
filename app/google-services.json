@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1072927554889",
+    "project_id": "solanceinbox",
+    "storage_bucket": "solanceinbox.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1072927554889:android:97787f8ecf42fcfc6d6e98",
+        "android_client_info": {
+          "package_name": "com.devvikram.solaceinbox"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHdDVy5bWJKH0npPA0mGvaTGWgHAiP3Ic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

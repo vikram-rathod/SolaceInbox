@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activities.login.RegisterActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Logo Image -->
+        <ImageView
+            android:id="@+id/logo_image"
+            android:layout_width="150dp"
+            android:layout_height="220dp"
+            android:layout_marginBottom="24dp"
+            android:background="@color/white"
+            android:contentDescription="App Logo"
+            android:scaleType="fitXY"
+            android:src="@drawable/solance_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Slogan -->
+        <TextView
+            android:id="@+id/slogan_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="Join us and stay organized!"
+            android:textColor="?colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/signup_title" />
+
+        <TextView
+            android:id="@+id/signup_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="Create an Account"
+            android:textColor="?colorPrimary"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logo_image" />
+
+        <!-- Name Label -->
+        <TextView
+            android:id="@+id/name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Full Name"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/slogan_text" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/name_input_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name_label">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/name_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/white"
+                android:hint="Enter your full name"
+                android:textColor="@android:color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Email Label -->
+        <TextView
+            android:id="@+id/email_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Email"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name_input_layout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email_input_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/email_label">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/white"
+                android:hint="Enter your email"
+                android:inputType="textEmailAddress"
+                android:textColor="@android:color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Password Label -->
+        <TextView
+            android:id="@+id/password_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Password"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/email_input_layout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password_input_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/password_label">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/white"
+                android:hint="Enter your password"
+                android:inputType="textPassword"
+                android:textColor="@android:color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Confirm Password Label -->
+        <TextView
+            android:id="@+id/confirm_password_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Confirm Password"
+            android:textSize="16sp"
+
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/password_input_layout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/confirm_password_input_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/confirm_password_label">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/confirm_password_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/white"
+                android:hint="Confirm your password"
+                android:inputType="textPassword"
+                android:textColor="@android:color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/error_message_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text=""
+            android:textColor="?colorError"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/confirm_password_input_layout" />
+
+        <LinearLayout
+            android:id="@+id/button_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/error_message_textview">
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/signup_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:text="Sign Up"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/login_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Already have an account? Log In"
+            android:textColor="?colorPrimary"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_layout" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

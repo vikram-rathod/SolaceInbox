@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/all"
+        android:icon="@drawable/baseline_email_24"
+        android:title="All" />
+    <item
+        android:id="@+id/internal"
+        android:icon="@drawable/internal_icon"
+        android:title="Internal" />
+    <item
+        android:id="@+id/external"
+        android:icon="@drawable/external_icon"
+        android:title="External" />
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/baseline_person_24"
+        android:title="Profile" />
+
+
+</menu>

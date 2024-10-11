@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity">
+
+    <!-- Main content layout -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/app_name"
+                app:titleTextColor="@color/white" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginVertical="4dp"
+                    android:layout_weight="1"
+                    app:checkedButton="@id/focussed_btn">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/focussed_btn"
+                        style="@style/ThemeOverlay.Material3.Button.TonalButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:backgroundTint="#8B25C3"
+                        android:text="Focused"
+                        android:textSize="13sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/other_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:backgroundTint="@color/white"
+                        android:text="Other"
+                        android:textColor="@color/black"
+
+                        android:textSize="13sp" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.Material3.Button.ElevatedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Filter"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <FrameLayout
+            android:id="@+id/fragment_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/app_bar_layout" />
+
+        <!-- Bottom navigation view -->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:activeIndicatorLabelPadding="8dp"
+            app:itemTextColor="@color/bottom_nav_item_color"
+            app:labelVisibilityMode="labeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/bottom_nav_menu" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:contentDescription="TODO"
+            android:src="@drawable/baseline_add_24"
+            app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/new_email_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#8B25C3"
+                android:padding="8dp"
+                android:text="New"
+                app:icon="@drawable/baseline_add_24" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/more_option_btn"
+                style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:icon="@drawable/arrow_up_icon" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Side navigation view for the drawer -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="72dp"
+                android:layout_height="match_parent"
+                android:background="@color/light_grey"
+                android:orientation="vertical">
+
+                <!-- Top Items -->
+                <com.google.android.material.navigationrail.NavigationRailView
+                    android:id="@+id/navigation_rail_view"
+                    android:layout_width="72dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/light_grey"
+                    android:padding="8dp"
+                    app:labelVisibilityMode="unlabeled"
+                    app:menu="@menu/navigation_rail" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/circular_nav_rail_background"
+                        android:paddingVertical="4dp"
+                        android:src="@drawable/baseline_question_mark_24" />
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/circular_nav_rail_background"
+                        android:paddingVertical="4dp"
+
+                        android:src="@drawable/baseline_settings_24" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <com.google.android.material.navigation.NavigationView
+                android:id="@+id/navigation_view"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                app:headerLayout="@layout/nav_header_layout"
+
+                app:layout_constraintStart_toEndOf="@id/navigation_rail_view"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </com.google.android.material.navigation.NavigationView>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:letterSpacing="0.02"
+                android:lineSpacingExtra="2dp"
+                android:text="From Bcstep"
+                android:textColor="@color/purple"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="8dp"
+                android:contentDescription="Icon"
+                android:src="@drawable/bcstep_logo" />
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.drawerlayout.widget.DrawerLayout>

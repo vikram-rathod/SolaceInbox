@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!--    Light Theme Colors-->
+    <color name="my_light_primary">#bb9dcc</color>
+    <color name="my_light_primary_variant">#9b7bb0</color>
+    <color name="my_light_on_primary">#FFFFFF</color>
+
+    <!-- Secondary colors -->
+    <color name="my_light_secondary">#9fccbb</color>
+    <color name="my_light_on_secondary">#000000</color>
+
+    <!-- Background and surface -->
+    <color name="my_light_background">#FFFFFF</color>
+    <color name="my_light_surface">#F5F5F5</color>
+    <color name="my_light_on_surface">#000000</color>
+
+    <!--    Dark Theme Colors-->
+    <!-- Primary colors -->
+    <color name="my_dark_primary">#bb9dcc</color>
+    <color name="my_dark_primary_variant">#9b7bb0</color>
+    <color name="my_dark_on_primary">#1b1b1b</color>
+
+    <!-- Secondary colors -->
+    <color name="my_dark_secondary">#7dc7ac</color>
+    <color name="my_dark_on_secondary">#1b1b1b</color>
+
+    <!-- Background and surface -->
+    <color name="my_dark_background">#121212</color>
+    <color name="my_dark_surface">#1e1e1e</color>
+    <color name="my_dark_on_surface">#E0E0E0</color>
+
+    <color name="my_dark_text">#FFFFFF</color>
+    <color name="error_color">#F21717</color>
+
+
+    <!--    Other Common Colors-->
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="blue">#6B7CDB</color>
+    <color name="purple">#41246A</color>
+    <color name="grey">#C3C1C5</color>
+    <color name="light_grey">#E9E8EB</color>
+    <color name="white_light">#F5F4F6</color>
+    <color name="light_text_color">#867894</color>
+
+
+    <color name="selected_item_color">#FAFAFA</color>
+    <color name="unselected_item_color">#D1C9C9</color>
+
+
+    <!--    Purple Colors Shades -->
+
+    <color name="light_purple">#D8C4F4</color>
+    <color name="lavender">#E6E6FA</color>
+    <color name="thistle">#D8BFD8</color>
+    <color name="plum">#DDA0DD</color>
+    <color name="violet">#EE82EE</color>
+    <color name="orchid">#DA70D6</color>
+    <color name="medium_purple">#9370DB</color>
+    <color name="pale_lilac">#E0BBE4</color>
+    <color name="mauve">#E0B0FF</color>
+    <color name="heliotrope">#DF73FF</color>
+
+
+</resources>
