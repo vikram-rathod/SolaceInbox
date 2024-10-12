@@ -3,8 +3,10 @@ package com.devvikram.solaceinbox.activities.addcompose
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import com.devvikram.solaceinbox.common.SharedViewModel
 import com.devvikram.solaceinbox.constant.MyApplication
 import com.devvikram.solaceinbox.databinding.ActivityAddNewMailBinding
 import com.devvikram.solaceinbox.model.Mail
@@ -17,6 +19,8 @@ class AddNewMailActivity : AppCompatActivity() {
     private val addComposeMailViewModel: AddComposeMailViewmodel by lazy {
         (application as MyApplication).addComposeMailViewModel
     }
+    private val sharedViewModel: SharedViewModel by viewModels()
+
 
     private var userList: ArrayList<UserModel> = ArrayList()
     private var selectedUsers: ArrayList<UserModel> = ArrayList()
@@ -90,6 +94,7 @@ class AddNewMailActivity : AppCompatActivity() {
                 } else if (state.isSuccessful) {
                     Toast.makeText(this, "Mail Sent Successfully", Toast.LENGTH_SHORT).show()
                     setResult(RESULT_OK)
+                    sharedViewModel.setRefreshFlag(true)
                     finish()
                 } else if (state.isFailure) {
                     Toast.makeText(this, "Error: ${state.errorMessage}", Toast.LENGTH_SHORT).show()

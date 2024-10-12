@@ -12,38 +12,29 @@ import com.devvikram.solaceinbox.model.CategorizedEmail
 
 class CategoryEmailAdapter(
     private val activity: Activity,
-    private val categorizedEmailList: List<CategorizedEmail>
+    private val categorizedEmailList: ArrayList<CategorizedEmail>
 ) : RecyclerView.Adapter<CategoryEmailAdapter.CategoryViewHolder>() {
+    private var emailAdapter: EmailAdapter? = null
+
 
     inner class CategoryViewHolder(private val binding: ItemCategorizedEmailBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(category: CategorizedEmail) {
             binding.textViewCategory.text = category.category
+            Log.d("TAG", "Caetksdjfl: ${category.mails.size}")
 
-            category.mails.forEachIndexed { index, mail ->
-                Log.d(
-                    "TAG", """
-        Mail #$index:
-        - ID: ${mail.id}
-        - Sender ID: ${mail.senderId}
-        - Sender Name: ${mail.senderName}
-        - Subject: ${mail.subject}
-        - Recipients: ${mail.recipients.joinToString { it.email }}  
-        - Body: ${mail.body}
-        - Date: ${mail.cDate}
-    """.trimIndent()
+            // Check if the adapter is null, if so, create it
+            if (emailAdapter == null) {
+                emailAdapter = EmailAdapter(activity, category.mails.toMutableList())
+                binding.recyclerViewEmailsInCategory.adapter = emailAdapter
+                binding.recyclerViewEmailsInCategory.layoutManager = LinearLayoutManager(activity)
+                binding.recyclerViewEmailsInCategory.addItemDecoration(
+                    DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
                 )
+            } else {
+                // Update the existing adapter's data
+                emailAdapter?.updateEmails(category.mails)
             }
-            val emailAdapter = EmailAdapter(activity, category.mails)
-            binding.recyclerViewEmailsInCategory.adapter = emailAdapter
-
-            binding.recyclerViewEmailsInCategory.layoutManager = LinearLayoutManager(activity)
-            binding.recyclerViewEmailsInCategory.addItemDecoration(
-                DividerItemDecoration(
-                    activity,
-                    DividerItemDecoration.VERTICAL
-                )
-            )
         }
     }
 
@@ -60,6 +51,12 @@ class CategoryEmailAdapter(
 
     override fun getItemCount(): Int {
         return categorizedEmailList.size
+    }
+
+    fun updateData(categorized: ArrayList<CategorizedEmail>) {
+        categorizedEmailList.clear()
+        categorizedEmailList.addAll(categorized)
+        notifyDataSetChanged()
     }
 
 

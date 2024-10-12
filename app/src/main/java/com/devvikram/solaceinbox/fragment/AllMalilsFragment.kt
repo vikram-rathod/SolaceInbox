@@ -1,6 +1,7 @@
 package com.devvikram.solaceinbox.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.devvikram.solaceinbox.adapter.CategoryEmailAdapter
+import com.devvikram.solaceinbox.common.SharedViewModel
 import com.devvikram.solaceinbox.constant.MyApplication
 import com.devvikram.solaceinbox.databinding.FragmentAllMalilsBinding
 import com.devvikram.solaceinbox.model.CategorizedEmail
@@ -20,10 +22,13 @@ import java.util.Calendar
 class AllMalilsFragment : Fragment() {
 
     private lateinit var binding : FragmentAllMalilsBinding
-    private val categorizedEmails: MutableMap<String, ArrayList<Mail>> = mutableMapOf()
+    private val categorizedEmails: HashMap<String, ArrayList<Mail>> = HashMap()
 
     private val allMailsViewModel: AllMailViewModel by lazy {
         (requireActivity().application as MyApplication).allMailsViewModel
+    }
+    private val sharedViewModel: SharedViewModel by lazy {
+        (requireActivity().application as MyApplication).sharedViewModel
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,10 +49,14 @@ class AllMalilsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var emailAdapter: CategoryEmailAdapter? = null
+
         allMailsViewModel.allMails.observe(viewLifecycleOwner) { state ->
             val emailList = state.mails
+            Log.d(TAG, "onViewCreated: Email List Size: ${emailList.size}")
             val categorized = categorizeEmails(emailList).map { CategorizedEmail(it.key, it.value) }
 
+            Log.d(TAG, "onViewCreated: Categories Email list size ${categorized.size}")
             when {
                 state.isLoading -> {
                     binding.recyclerViewEmails.visibility = View.GONE
@@ -63,15 +72,12 @@ class AllMalilsFragment : Fragment() {
                     binding.emptyView.visibility =
                         if (emailList.isEmpty()) View.VISIBLE else View.GONE
 
-                    val emailAdapter = CategoryEmailAdapter(requireActivity(), categorized)
-
-                    if (binding.recyclerViewEmails.adapter == null) {
+                    if (emailAdapter == null) {
+                        emailAdapter = CategoryEmailAdapter(requireActivity(), categorized as ArrayList)
                         binding.recyclerViewEmails.adapter = emailAdapter
                         binding.recyclerViewEmails.layoutManager = LinearLayoutManager(requireContext())
                     } else {
-                        (binding.recyclerViewEmails.adapter as CategoryEmailAdapter).apply {
-                            notifyDataSetChanged()
-                        }
+                        emailAdapter?.updateData(categorized as ArrayList)
                     }
                     Snackbar.make(binding.root, "Data loaded successfully", Snackbar.LENGTH_SHORT).show()
                 }
@@ -93,58 +99,62 @@ class AllMalilsFragment : Fragment() {
         }
 
     }
-    private fun categorizeEmails(emailList: List<Mail>): MutableMap<String, ArrayList<Mail>> {
+    private fun categorizeEmails(emailList: ArrayList<Mail>): HashMap<String, ArrayList<Mail>> {
+        val categorizedEmails = HashMap<String, ArrayList<Mail>>()
+
         emailList.forEach { email ->
             val emailDate = AppUtil.getEmailDate(email.cDate)
             val today = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(
-                Calendar.SECOND,
-                0
-            ); set(Calendar.MILLISECOND, 0)
+                set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0)
             }
             val yesterday = Calendar.getInstance().apply {
-                add(Calendar.DAY_OF_YEAR, -1); set(
-                Calendar.HOUR_OF_DAY,
-                0
-            ); set(Calendar.MINUTE, 0);
+                add(Calendar.DAY_OF_YEAR, -1); set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
             }
             val lastWeek = Calendar.getInstance().apply {
-                add(Calendar.DAY_OF_YEAR, -7); set(
-                Calendar.HOUR_OF_DAY,
-                0
-            ); set(Calendar.MINUTE, 0);
+                add(Calendar.DAY_OF_YEAR, -7); set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
             }
             val lastMonth = Calendar.getInstance().apply {
-                add(Calendar.MONTH, -1); set(Calendar.HOUR_OF_DAY, 0); set(
-                Calendar.MINUTE,
-                0
-            );
+                add(Calendar.MONTH, -1); set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
             }
 
             when {
                 emailDate.after(today.time) -> {
-                    categorizedEmails.getOrPut("Today") { ArrayList() }.add(email)
+                    addUniqueEmailToCategory("Today", email, categorizedEmails)
                 }
-
                 emailDate.after(yesterday.time) -> {
-                    categorizedEmails.getOrPut("Yesterday") { ArrayList() }.add(email)
+                    addUniqueEmailToCategory("Yesterday", email, categorizedEmails)
                 }
-
                 emailDate.after(lastWeek.time) -> {
-                    categorizedEmails.getOrPut("Last Week") { ArrayList() }.add(email)
+                    addUniqueEmailToCategory("Last Week", email, categorizedEmails)
                 }
-
                 emailDate.after(lastMonth.time) -> {
-                    categorizedEmails.getOrPut("Last Month") { ArrayList() }.add(email)
+                    addUniqueEmailToCategory("Last Month", email, categorizedEmails)
                 }
-
                 else -> {
-                    categorizedEmails.getOrPut("Older") { ArrayList() }.add(email)
+                    addUniqueEmailToCategory("Older", email, categorizedEmails)
                 }
             }
         }
+
         return categorizedEmails
     }
+
+    private fun addUniqueEmailToCategory(
+        category: String,
+        email: Mail,
+        categorizedEmails: HashMap<String, ArrayList<Mail>>
+    ) {
+        val emailList = categorizedEmails.getOrPut(category) { ArrayList() }
+
+        if (!emailList.contains(email)) {
+            emailList.add(email)
+        }
+    }
+
 
     companion object {
         const val TAG = "AllMailsFragment"

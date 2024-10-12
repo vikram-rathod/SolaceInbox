@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -12,6 +13,7 @@ import com.devvikram.solaceinbox.activities.addcompose.AddNewMailActivity
 import com.devvikram.solaceinbox.constant.MyApplication
 import com.devvikram.solaceinbox.activities.login.AuthViewModel
 import com.devvikram.solaceinbox.activities.login.LoginActivity
+import com.devvikram.solaceinbox.common.SharedViewModel
 import com.devvikram.solaceinbox.databinding.ActivityMainBinding
 import com.devvikram.solaceinbox.fragment.AllMalilsFragment
 import com.devvikram.solaceinbox.model.NavItemModel
@@ -22,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private val authViewModel: AuthViewModel by lazy {
         (application as MyApplication).authViewModel
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -22,22 +22,36 @@ class AllMailViewModel(
         fetchAllMails()
     }
 
-    fun fetchAllMails() {
+    private fun fetchAllMails() {
         viewModelScope.launch {
             repository.getAllMails() { mailArrayList: ArrayList<Mail>, message: String ->
+                // Log the complete list of emails before filtering
+                Log.d("TAG", "fetchAllMails: Unfiltered mail list: $mailArrayList")
+                Log.d("TAG", "fetchAllMails: Unfiltered mail count: ${mailArrayList.size}")
+
                 if (mailArrayList.isNotEmpty()) {
                     val filteredMails = mailArrayList.filter { mail ->
                         mail.recipients.any { recipient -> recipient.userId == currentUserId }
                     }
-                    Log.d("TAG", "fetchAllMails: list are  $mailArrayList")
+
+                    // Log the filtered list of emails
+                    Log.d("TAG", "fetchAllMails: Filtered mail list: $filteredMails")
+                    Log.d("TAG", "fetchAllMails: Filtered mail count: ${filteredMails.size}")
+
                     _allMails.value =
-                        MailState(mails = filteredMails as ArrayList<Mail>, message = message, isSuccessful = true)
+                        MailState(
+                            mails = filteredMails as ArrayList<Mail>,
+                            message = message,
+                            isSuccessful = true
+                        )
                 } else {
+                    Log.d("TAG", "fetchAllMails: No mails found.")
                     _allMails.value = MailState(message = message, isFailure = true)
                 }
             }
         }
     }
+
     fun resetState() {
         _allMails.value = MailState()
     }
