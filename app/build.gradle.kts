@@ -1,7 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.gms.google-services")    }
+    id("com.google.gms.google-services")
+    id("kotlin-parcelize")
+}
+
 
 android {
     namespace = "com.devvikram.solaceinbox"
@@ -57,6 +60,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     implementation (libs.circleimageview)
+    implementation(libs.androidx.swiperefreshlayout)
+
+    implementation(libs.glide)
 
 
 //    Firebase implementation

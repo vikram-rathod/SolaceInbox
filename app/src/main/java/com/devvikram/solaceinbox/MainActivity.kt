@@ -13,6 +13,7 @@ import com.devvikram.solaceinbox.constant.MyApplication
 import com.devvikram.solaceinbox.activities.login.AuthViewModel
 import com.devvikram.solaceinbox.activities.login.LoginActivity
 import com.devvikram.solaceinbox.databinding.ActivityMainBinding
+import com.devvikram.solaceinbox.fragment.AllMalilsFragment
 import com.devvikram.solaceinbox.model.NavItemModel
 
 class MainActivity : AppCompatActivity() {

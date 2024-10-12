@@ -64,5 +64,11 @@
     <color name="mauve">#E0B0FF</color>
     <color name="heliotrope">#DF73FF</color>
 
+    <color name="purple_light_2">#E1BEE7</color>
+    <color name="yellow_light_2">#FFF9C4</color>
+    <color name="teal_light_2">#B2DFDB</color>
+    <color name="cyan_light_2">#B2EBF2</color>
+    <color name="pink_light_2">#F8BBD0</color>
+    <color name="brown_light_2">#D7CCC8</color>
 
 </resources>

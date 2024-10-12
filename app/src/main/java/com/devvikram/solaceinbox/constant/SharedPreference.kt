@@ -42,6 +42,10 @@ class SharedPreference(context: Context) {
         return sharedPreferences.getBoolean(IS_LOGGED_IN, false)
     }
 
+    fun getUserName(): String {
+        return sharedPreferences.getString(USER_NAME, "").toString()
+    }
+
     companion object {
         const val SHARED_PREF_NAME = "solace_inbox_shared_pref"
         const val USER_ID = "user_id"

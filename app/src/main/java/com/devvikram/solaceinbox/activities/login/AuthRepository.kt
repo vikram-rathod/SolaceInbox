@@ -1,14 +1,15 @@
 package com.devvikram.solaceinbox.activities.login
 
 import android.util.Log
+import com.devvikram.solaceinbox.MyFirebase.FirebaseInstance
 import com.devvikram.solaceinbox.model.UserModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class AuthRepository {
 
-    private val firebaseAuth = FirebaseAuth.getInstance()
-    private val firestore = FirebaseFirestore.getInstance()
+    private val firebaseAuth = FirebaseInstance.getFirebaseAuth()
+    private val firestore = FirebaseInstance.getFirebaseFireStore()
 
     fun registerUser(userModel: UserModel,
                      callback: (Boolean, String) -> Unit) {
@@ -26,7 +27,6 @@ class AuthRepository {
                     firestore.collection("users").document(userId).set(user)
                     callback(true,"Account Created Successfully")
                 } else {
-                    // Handle failed registration
                     callback(false,task.exception?.message.toString())
                 }
             }
