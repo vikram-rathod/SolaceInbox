@@ -14,5 +14,14 @@ data class Mail(
     val body: String = "",
     var cDate: String = "",
     val attachments: MutableList<Attachment> = mutableListOf(),
-    val type : String = ""
+    val type : EmailType = EmailType.INBOX
 ) : Parcelable
+
+
+
+@Parcelize
+enum class EmailType :Parcelable{
+    INBOX,
+    SENT,
+    DRAFT
+}

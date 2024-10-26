@@ -1,8 +1,10 @@
 package com.devvikram.solaceinbox.utility
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.util.Log
 import androidx.core.net.ParseException
+import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -127,6 +129,14 @@ class AppUtil {
                 return "Invalid date"
             }
 
+        }
+
+        fun showSnackBar(activity: Activity, message: String) {
+            Snackbar.make(activity.findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show()
+        }
+
+        fun showUnavailableFeatureSnackBar(activity: Activity, message: String) {
+            Snackbar.make(activity.findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show()
         }
     }
 }

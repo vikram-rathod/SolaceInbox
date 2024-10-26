@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.devvikram.solaceinbox.MyFirebase.FirebaseInstance
 import com.devvikram.solaceinbox.constant.MyApplication
 import com.devvikram.solaceinbox.constant.SharedPreference
+import com.devvikram.solaceinbox.model.EmailType
 import com.devvikram.solaceinbox.model.Mail
 import kotlinx.coroutines.launch
 
@@ -22,31 +23,40 @@ class AllMailViewModel(
     val allMails: LiveData<MailState> = _allMails
 
 
-     fun fetchAllMails() {
+    fun fetchAllMails(emailType: EmailType) {
         viewModelScope.launch {
             repository.getAllMails { mailArrayList: ArrayList<Mail>, message: String ->
 
                 if (mailArrayList.isNotEmpty()) {
-                    val filteredMails = mailArrayList.filter { mail ->
-                        mail.recipients.any { recipient ->
-                            val isRecipient = recipient.userId == currentUserId
-                            Log.d("FilteredMailsLog", "Mail ID: ${mail.id}, Recipient ID: ${recipient.userId}, Is Match: $isRecipient")
-                            isRecipient
+                    val filteredMails = mailArrayList.map { mail ->
+                        mail.copy(type = emailType)
+                    }.filter { mail ->
+                        when (emailType) {
+                            EmailType.INBOX -> mail.recipients.any { recipient ->
+                                val isRecipient = recipient.userId == currentUserId
+                                Log.d("FilteredMailsLog", "Mail ID: ${mail.id}, Recipient ID: ${recipient.userId}, Is Match: $isRecipient")
+                                isRecipient
+                            }
+                            EmailType.SENT -> mail.senderId == currentUserId
+                            else -> false
                         }
                     }
-                    _allMails.value =
-                        MailState(
-                            mails = filteredMails as ArrayList<Mail>,
-                            message = message,
-                            isSuccessful = true
-                        )
+                    _allMails.value = MailState(
+                        mails = filteredMails as ArrayList<Mail>,
+                        message = message,
+                        isSuccessful = true,
+                    )
                 } else {
                     Log.d("TAG", "fetchAllMails: No mails found.")
-                    _allMails.value = MailState(message = message, isFailure = true)
+                    _allMails.value = MailState(
+                        message = message,
+                        isFailure = true,
+                    )
                 }
             }
         }
     }
+
 
     data class MailState(
         val isLoading: Boolean = false,

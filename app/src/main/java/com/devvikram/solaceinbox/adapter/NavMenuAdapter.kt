@@ -44,6 +44,17 @@ class NavMenuAdapter(
 
 
     }
+
+    fun updateSelection(title: String) {
+        val previousSelectedPosition = selectedPosition
+        selectedPosition = menuItems.indexOfFirst { it.title == title }
+
+        notifyItemChanged(previousSelectedPosition)
+        notifyItemChanged(selectedPosition)
+
+
+    }
+
     inner class MenuItemViewHolder(val binding: ItemNavMenuBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(menuItem: NavItemModel, position: Int) {
             binding.titleTextview.text = menuItem.title

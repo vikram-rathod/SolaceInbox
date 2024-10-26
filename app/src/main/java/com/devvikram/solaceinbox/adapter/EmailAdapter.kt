@@ -1,5 +1,6 @@
 package com.devvikram.solaceinbox.adapter
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
@@ -14,6 +15,7 @@ import com.devvikram.solaceinbox.activities.EmailDetailActivity
 import com.devvikram.solaceinbox.databinding.ItemEmaiDraftLayoutBinding
 import com.devvikram.solaceinbox.databinding.ItemEmaiSentLayoutBinding
 import com.devvikram.solaceinbox.databinding.ItemEmailLayoutBinding
+import com.devvikram.solaceinbox.model.EmailType
 import com.devvikram.solaceinbox.model.Mail
 import com.devvikram.solaceinbox.utility.AppUtil
 
@@ -69,9 +71,26 @@ class EmailAdapter(private val activity: Activity, private val emailList: Mutabl
         private val binding: ItemEmaiSentLayoutBinding,
         private val activity: Activity
     ) : BaseEmailViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         override fun bind(email: Mail) {
             Log.d("TAG", "SentEmailBind: ${email.senderName}")
-            binding.tvRecipient.text = email.recipients[0].email
+
+            when (val size = email.recipients.size) {
+                1 -> {
+                    binding.tvRecipient.text = "TO: ${email.recipients[0].email}"
+                }
+                2 -> {
+                    binding.tvRecipient.text = "TO: ${email.recipients[0].email} & ${email.recipients[1].email}"
+                }
+                else -> {
+                    val moreCount = size - 2
+                    binding.tvRecipient.text = "TO: ${email.recipients[0].email}, ${email.recipients[1].email} & $moreCount more"
+                }
+            }
+
+
+
+            binding.tvRecipient.text = "TO: ${email.recipients[0].email}"
             binding.tvSubject.text = email.subject
             binding.tvTimestamp.text = AppUtil.getTimeFromDate(email.cDate)
 
@@ -147,10 +166,9 @@ class EmailAdapter(private val activity: Activity, private val emailList: Mutabl
 
     override fun getItemViewType(position: Int): Int {
         return when (emailList[position].type) {
-            "0" -> INBOX_TYPE
-            "1" -> SENT_TYPE
-            "2" -> DRAFT_TYPE
-            else -> throw IllegalArgumentException("Unknown email type")
+            EmailType.INBOX -> INBOX_TYPE
+            EmailType.SENT -> SENT_TYPE
+            EmailType.DRAFT -> DRAFT_TYPE
         }
     }
 

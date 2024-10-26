@@ -13,6 +13,7 @@ import com.devvikram.solaceinbox.common.SharedViewModel
 import com.devvikram.solaceinbox.constant.MyApplication
 import com.devvikram.solaceinbox.databinding.FragmentAllMalilsBinding
 import com.devvikram.solaceinbox.model.CategorizedEmail
+import com.devvikram.solaceinbox.model.EmailType
 import com.devvikram.solaceinbox.model.Mail
 import com.devvikram.solaceinbox.model.NavItemModel
 import com.devvikram.solaceinbox.utility.AppUtil
@@ -32,10 +33,17 @@ class AllMalilsFragment : Fragment() {
     private val sharedViewModel: SharedViewModel by lazy {
         (requireActivity().application as MyApplication).sharedViewModel
     }
+    private lateinit var emailType: EmailType
+    private lateinit var navItemModel: NavItemModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        allMailsViewModel.fetchAllMails()
+        val arguments = arguments
+        if (arguments!= null) {
+            navItemModel = arguments.getParcelable(ARG_NAVIGATION_MODEL)!!
+            emailType = arguments.getParcelable(ARG_EMAIL_TYPE)?: EmailType.INBOX
+        }
+        allMailsViewModel.fetchAllMails(emailType)
     }
 
     override fun onCreateView(
@@ -49,6 +57,8 @@ class AllMalilsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated: InAll Fragment ${navItemModel.title}")
+        binding.titleTextview.text = navItemModel.title
 
         allMailsViewModel.allMails.observe(viewLifecycleOwner) { state ->
             val emailList = state.mails
@@ -73,8 +83,6 @@ class AllMalilsFragment : Fragment() {
                         emailAdapter = CategoryEmailAdapter(requireActivity(), categorized as ArrayList)
                         binding.recyclerViewEmails.adapter = emailAdapter
                         binding.recyclerViewEmails.layoutManager = LinearLayoutManager(requireContext())
-
-                    Snackbar.make(binding.root, "Data loaded successfully", Snackbar.LENGTH_SHORT).show()
                 }
 
 
@@ -91,6 +99,9 @@ class AllMalilsFragment : Fragment() {
                     )
                 }
             }
+        }
+        binding.filterBtn.setOnClickListener {
+            Toast.makeText(requireContext(), "Filter feature coming soon", Toast.LENGTH_SHORT).show()
         }
         handleSearch()
 
@@ -210,11 +221,15 @@ class AllMalilsFragment : Fragment() {
 
     companion object {
         const val TAG = "AllMailsFragment"
+        private const val ARG_EMAIL_TYPE = "email_type"
+        private const val ARG_NAVIGATION_MODEL = "navigation_model"
+
         @JvmStatic
-        fun newInstance(navItemModel: NavItemModel) =
+        fun newInstance( emailType: EmailType, navItemModel: NavItemModel) =
             AllMalilsFragment().apply {
                 arguments = Bundle().apply {
-//                    putParcelable("nav_item_model", navItemModel)
+                    putParcelable(ARG_EMAIL_TYPE, emailType)
+                    putParcelable(ARG_NAVIGATION_MODEL,navItemModel )
                 }
             }
     }

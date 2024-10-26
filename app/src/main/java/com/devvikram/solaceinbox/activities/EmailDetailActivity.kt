@@ -26,6 +26,44 @@ class EmailDetailActivity : AppCompatActivity() {
         binding.emailToolbar.setNavigationOnClickListener {
             finish()
         }
+        binding.emailToolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.action_reply -> {
+                    AppUtil.showUnavailableFeatureSnackBar(this, "Reply feature will be available soon.")
+                    true
+                }
+                R.id.action_delete -> {
+                    AppUtil.showUnavailableFeatureSnackBar(this, "Delete feature will be available soon.")
+                    true
+                }
+                R.id.action_archive -> {
+                    AppUtil.showUnavailableFeatureSnackBar(this, "Archive feature will be available soon.")
+                    true
+                }
+                R.id.action_move_to_folder -> {
+                    AppUtil.showUnavailableFeatureSnackBar(this, "Move to Folder feature will be available soon.")
+                    true
+                }
+                R.id.action_pin -> {
+                    AppUtil.showUnavailableFeatureSnackBar(this, "Pin feature will be available soon.")
+                    true
+                }
+                R.id.action_snooze -> {
+                    AppUtil.showUnavailableFeatureSnackBar(this, "Snooze feature will be available soon.")
+                    true
+                }
+                R.id.action_flag -> {
+                    AppUtil.showUnavailableFeatureSnackBar(this, "Flag feature will be available soon.")
+                    true
+                }
+                R.id.action_mark_as_unread -> {
+                    AppUtil.showUnavailableFeatureSnackBar(this, "Mark as Unread feature will be available soon.")
+                    true
+                }
+                else -> false
+            }
+        }
+
         email = intent.getParcelableExtra<Mail>("email")
 
         if (email != null) {
@@ -44,6 +82,9 @@ class EmailDetailActivity : AppCompatActivity() {
 
         binding.menuButton.setOnClickListener { view ->
             showPopupMenu(view)
+        }
+        binding.expandeBtnToCompose.setOnClickListener{
+            AppUtil.showSnackBar(this,"This feature soon available")
         }
         binding.emailToolbar.setNavigationOnClickListener {
             finish()
@@ -83,17 +124,17 @@ class EmailDetailActivity : AppCompatActivity() {
         popupMenu.setOnMenuItemClickListener { menuItem: MenuItem ->
             when (menuItem.itemId) {
                 R.id.action_reply -> {
-                    // Handle Reply action
+                    AppUtil.showUnavailableFeatureSnackBar(this,"Reply feature will be available soon.")
                     true
                 }
 
                 R.id.action_delete -> {
-                    // Handle Delete action
+                    AppUtil.showUnavailableFeatureSnackBar(this,"Delete feature will be available soon.")
                     true
                 }
 
                 R.id.action_mark_as_read -> {
-                    // Handle Mark as Read action
+                    AppUtil.showUnavailableFeatureSnackBar(this,"Mark as Read feature will be available soon.")
                     true
                 }
 
@@ -103,6 +144,7 @@ class EmailDetailActivity : AppCompatActivity() {
 
         popupMenu.show()
     }
+
 
 
 }

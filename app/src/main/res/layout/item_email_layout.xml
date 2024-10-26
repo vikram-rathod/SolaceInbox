@@ -65,7 +65,6 @@
                 android:src="@drawable/profile_icon_2"
                 android:visibility="gone" />
         </RelativeLayout>
-        <!-- Profile Image -->
 
 
         <!-- Email Content Layout -->

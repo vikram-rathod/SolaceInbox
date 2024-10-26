@@ -1,14 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Profile" />
+    <!-- ImageView on the left side -->
+    <RelativeLayout
+        android:id="@+id/profile_relateive_layout"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-</FrameLayout>
+        <RelativeLayout
+            android:id="@+id/no_profile_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/circular_background"
+            android:clipChildren="true"
+            android:clipToOutline="true">
+
+            <ImageView
+                android:id="@+id/sub_cat_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="Image Item" />
+
+            <!-- TextView to display the first letter -->
+            <TextView
+                android:id="@+id/first_letter_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+
+                android:text="J"
+
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="8dp"
+            android:clipToOutline="true"
+            android:contentDescription="Profile Image"
+            android:padding="2dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/profile_icon_2"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <!-- User Name -->
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:text="John Doe"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <!-- User Email -->
+    <TextView
+        android:id="@+id/user_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="24dp"
+        android:text="johndoe@example.com"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp" />
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="16dp"
+        android:background="@android:color/darker_gray" />
+
+    <!-- Additional Information -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User Details"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+
+        android:text="Location: New York, USA"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+
+        android:text="Phone: +1 234 567 890"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+
+        android:text="Bio: Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp" />
+
+    <!-- Logout Button -->
+    <Button
+        android:id="@+id/logout_button"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:text="Logout"
+        />
+
+</LinearLayout>

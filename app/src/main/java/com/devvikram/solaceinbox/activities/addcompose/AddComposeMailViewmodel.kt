@@ -48,6 +48,7 @@ class AddComposeMailViewmodel(
     fun sendComposeMail(mail: Mail) {
         mail.cDate = Date().toString()
         mail.senderName = sharedPreference.getUserName()
+        mail.senderId = sharedPreference.getCurrentUserId()
         mail.senderEmail = sharedPreference.getUserEmail()
         viewModelScope.launch {
             _composeMailState.value = ComposeMailState(isLoading = true)

@@ -6,7 +6,18 @@
     android:layout_height="match_parent">
 
     <!-- Search Bar for email search -->
+    <TextView
+        android:id="@+id/title_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Inbox"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
 
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
     <LinearLayout
         android:id="@+id/search_bar_layout"
         android:layout_width="match_parent"
@@ -19,7 +30,8 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/title_textview">
+
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/search_view"
@@ -34,6 +46,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_gravity="center"
+            android:id="@+id/filter_btn"
             android:layout_margin="8dp"
             android:background="@drawable/badge_background"
             android:padding="6dp"

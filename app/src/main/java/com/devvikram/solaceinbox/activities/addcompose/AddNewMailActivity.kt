@@ -17,6 +17,7 @@ import com.devvikram.solaceinbox.common.SharedViewModel
 import com.devvikram.solaceinbox.constant.MyApplication
 import com.devvikram.solaceinbox.databinding.ActivityAddNewMailBinding
 import com.devvikram.solaceinbox.model.Attachment
+import com.devvikram.solaceinbox.model.EmailType
 import com.devvikram.solaceinbox.model.Mail
 import com.devvikram.solaceinbox.model.UserModel
 import com.google.android.material.chip.Chip
@@ -109,7 +110,8 @@ class AddNewMailActivity : AppCompatActivity() {
                 subject = subject,
                 body = body,
                 recipients = selectedUsers,
-                attachments = attachmentList
+                attachments = attachmentList,
+                type = EmailType.INBOX
             )
             Log.d("AllNewMainActivityLog", "onCreate: $mail")
             addComposeMailViewModel.sendComposeMail(mail)
