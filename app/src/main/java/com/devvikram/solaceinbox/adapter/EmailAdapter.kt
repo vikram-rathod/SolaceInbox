@@ -2,6 +2,7 @@ package com.devvikram.solaceinbox.adapter
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.bumptech.glide.Glide
 import com.devvikram.solaceinbox.R
+import com.devvikram.solaceinbox.activities.EmailDetailActivity
 import com.devvikram.solaceinbox.databinding.ItemEmailLayoutBinding
 import com.devvikram.solaceinbox.model.Mail
 import com.devvikram.solaceinbox.utility.AppUtil
@@ -90,11 +92,11 @@ class EmailAdapter(private val activity: Activity, private val emailList: Mutabl
             }
 
 
-//            itemView.setOnClickListener {
-//                activity.startActivity(Intent(activity, EmailDetailActivity::class.java).apply {
-//                    putExtra("email", email)
-//                })
-//            }
+            itemView.setOnClickListener {
+                activity.startActivity(Intent(activity, EmailDetailActivity::class.java).apply {
+                    putExtra("email", email)
+                })
+            }
         }
 
 

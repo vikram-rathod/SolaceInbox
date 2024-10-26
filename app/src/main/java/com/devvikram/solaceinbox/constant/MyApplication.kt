@@ -14,7 +14,7 @@ class MyApplication : Application() {
     private val allMailRepository by lazy { AllmailRepository() }
     private val addComposeMailRepository by lazy { AddComposeMailRepository() }
 
-    val allMailsViewModel by lazy { AllMailViewModel(allMailRepository) }
+    val allMailsViewModel by lazy { AllMailViewModel(allMailRepository,this) }
     val authViewModel by lazy { AuthViewModel(authRepository, this) }
     val addComposeMailViewModel by lazy { AddComposeMailViewmodel(addComposeMailRepository, this) }
 

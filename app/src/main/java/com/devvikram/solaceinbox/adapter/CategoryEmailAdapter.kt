@@ -1,5 +1,6 @@
 package com.devvikram.solaceinbox.adapter
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,22 +20,19 @@ class CategoryEmailAdapter(
 
     inner class CategoryViewHolder(private val binding: ItemCategorizedEmailBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("NotifyDataSetChanged")
         fun bind(category: CategorizedEmail) {
             binding.textViewCategory.text = category.category
             Log.d("TAG", "Caetksdjfl: ${category.mails.size}")
 
-            // Check if the adapter is null, if so, create it
-            if (emailAdapter == null) {
-                emailAdapter = EmailAdapter(activity, category.mails.toMutableList())
-                binding.recyclerViewEmailsInCategory.adapter = emailAdapter
                 binding.recyclerViewEmailsInCategory.layoutManager = LinearLayoutManager(activity)
                 binding.recyclerViewEmailsInCategory.addItemDecoration(
                     DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
                 )
-            } else {
-                // Update the existing adapter's data
-                emailAdapter?.updateEmails(category.mails)
-            }
+                emailAdapter = EmailAdapter(activity, category.mails.toMutableList())
+                binding.recyclerViewEmailsInCategory.adapter = emailAdapter
+                emailAdapter?.notifyDataSetChanged()
+
         }
     }
 
@@ -46,7 +44,6 @@ class CategoryEmailAdapter(
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         holder.bind(categorizedEmailList[position])
-
     }
 
     override fun getItemCount(): Int {

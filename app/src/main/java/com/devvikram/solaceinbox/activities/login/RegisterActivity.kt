@@ -27,15 +27,22 @@ class RegisterActivity : AppCompatActivity() {
             authViewModel.registerUser(user)
         }
         authViewModel.registerState.observe(this) {
-            if (it.isLoading) {
-                showProgressBar()
-            } else if (it.isSuccessful) {
-                hideProgressBar()
-                startActivity(Intent(this, LoginActivity::class.java))
-                finish()
-            } else if (it.isFailure) {
-                hideProgressBar()
-                showErrorMessage(it.message)
+            when(it){
+                is AuthViewModel.AuthState.Loading -> {
+                    showProgressBar()
+                }
+                is AuthViewModel.AuthState.Success -> {
+                    hideProgressBar()
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                }
+                is AuthViewModel.AuthState.Error -> {
+                    hideProgressBar()
+                    showErrorMessage(it.message)
+                }
+                null -> {
+                    hideProgressBar()
+                }
             }
         }
     }

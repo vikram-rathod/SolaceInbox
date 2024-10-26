@@ -20,6 +20,8 @@ import com.google.android.material.snackbar.Snackbar
 import java.util.Calendar
 
 class AllMalilsFragment : Fragment() {
+    var emailAdapter: CategoryEmailAdapter? = null
+
 
     private lateinit var binding : FragmentAllMalilsBinding
     private val categorizedEmails: HashMap<String, ArrayList<Mail>> = HashMap()
@@ -33,9 +35,7 @@ class AllMalilsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
+        allMailsViewModel.fetchAllMails()
     }
 
     override fun onCreateView(
@@ -49,7 +49,6 @@ class AllMalilsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var emailAdapter: CategoryEmailAdapter? = null
 
         allMailsViewModel.allMails.observe(viewLifecycleOwner) { state ->
             val emailList = state.mails
@@ -71,14 +70,10 @@ class AllMalilsFragment : Fragment() {
                     binding.searchView.visibility = View.VISIBLE
                     binding.emptyView.visibility =
                         if (emailList.isEmpty()) View.VISIBLE else View.GONE
-
-                    if (emailAdapter == null) {
                         emailAdapter = CategoryEmailAdapter(requireActivity(), categorized as ArrayList)
                         binding.recyclerViewEmails.adapter = emailAdapter
                         binding.recyclerViewEmails.layoutManager = LinearLayoutManager(requireContext())
-                    } else {
-                        emailAdapter?.updateData(categorized as ArrayList)
-                    }
+
                     Snackbar.make(binding.root, "Data loaded successfully", Snackbar.LENGTH_SHORT).show()
                 }
 
@@ -97,6 +92,7 @@ class AllMalilsFragment : Fragment() {
                 }
             }
         }
+        handleSearch()
 
     }
     private fun categorizeEmails(emailList: ArrayList<Mail>): HashMap<String, ArrayList<Mail>> {
@@ -104,44 +100,70 @@ class AllMalilsFragment : Fragment() {
 
         emailList.forEach { email ->
             val emailDate = AppUtil.getEmailDate(email.cDate)
-            val today = Calendar.getInstance().apply {
+
+            Log.d("CategorizeEmails", "Email Date: $emailDate")
+
+            // Calendar to set up date ranges
+            val calendar = Calendar.getInstance()
+
+            // Set up "Today"
+            val today = calendar.apply {
                 set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0)
                 set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0)
-            }
-            val yesterday = Calendar.getInstance().apply {
-                add(Calendar.DAY_OF_YEAR, -1); set(Calendar.HOUR_OF_DAY, 0)
-                set(Calendar.MINUTE, 0)
-            }
-            val lastWeek = Calendar.getInstance().apply {
-                add(Calendar.DAY_OF_YEAR, -7); set(Calendar.HOUR_OF_DAY, 0)
-                set(Calendar.MINUTE, 0)
-            }
-            val lastMonth = Calendar.getInstance().apply {
-                add(Calendar.MONTH, -1); set(Calendar.HOUR_OF_DAY, 0)
-                set(Calendar.MINUTE, 0)
-            }
+            }.time
+            Log.d("CategorizeEmails", "Today: $today")
 
+            // Set up "Yesterday"
+            val yesterday = calendar.apply {
+                add(Calendar.DAY_OF_YEAR, -1); set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0)
+            }.time
+            Log.d("CategorizeEmails", "Yesterday: $yesterday")
+
+            // Set up "Last Week"
+            val lastWeek = calendar.apply {
+                add(Calendar.DAY_OF_YEAR, -6); set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0)
+            }.time
+            Log.d("CategorizeEmails", "Last Week: $lastWeek")
+
+            // Set up "Last Month"
+            val lastMonth = calendar.apply {
+                add(Calendar.MONTH, -1); set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0)
+            }.time
+            Log.d("CategorizeEmails", "Last Month: $lastMonth")
+
+            // Categorize the email based on its date
             when {
-                emailDate.after(today.time) -> {
+                emailDate.after(today) || emailDate == today -> {
                     addUniqueEmailToCategory("Today", email, categorizedEmails)
+                    Log.d("CategorizeEmails", "Email categorized as Today")
                 }
-                emailDate.after(yesterday.time) -> {
+                emailDate.after(yesterday) -> {
                     addUniqueEmailToCategory("Yesterday", email, categorizedEmails)
+                    Log.d("CategorizeEmails", "Email categorized as Yesterday")
                 }
-                emailDate.after(lastWeek.time) -> {
+                emailDate.after(lastWeek) -> {
                     addUniqueEmailToCategory("Last Week", email, categorizedEmails)
+                    Log.d("CategorizeEmails", "Email categorized as Last Week")
                 }
-                emailDate.after(lastMonth.time) -> {
+                emailDate.after(lastMonth) -> {
                     addUniqueEmailToCategory("Last Month", email, categorizedEmails)
+                    Log.d("CategorizeEmails", "Email categorized as Last Month")
                 }
                 else -> {
                     addUniqueEmailToCategory("Older", email, categorizedEmails)
+                    Log.d("CategorizeEmails", "Email categorized as Older")
                 }
             }
         }
 
         return categorizedEmails
     }
+
+
+
 
     private fun addUniqueEmailToCategory(
         category: String,
@@ -153,6 +175,36 @@ class AllMalilsFragment : Fragment() {
         if (!emailList.contains(email)) {
             emailList.add(email)
         }
+    }
+
+    private fun handleSearch(){
+        binding.searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let { filterEmails(it) }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let { filterEmails(it) }
+                return true
+            }
+        })
+    }
+
+    private fun filterEmails(query: String) {
+        val emailList = allMailsViewModel.allMails.value?.mails ?: arrayListOf()
+
+        val filteredEmails = emailList.filter { email ->
+            email.subject.contains(query, ignoreCase = true) ||
+                    email.body.contains(query, ignoreCase = true) ||
+                    email.senderName.contains(query, ignoreCase = true)
+        }
+
+        val filteredCategorizedEmails = categorizeEmails(ArrayList(filteredEmails)).map {
+            CategorizedEmail(it.key, it.value)
+        }
+
+        emailAdapter?.updateData(filteredCategorizedEmails as ArrayList<CategorizedEmail>)
     }
 
 

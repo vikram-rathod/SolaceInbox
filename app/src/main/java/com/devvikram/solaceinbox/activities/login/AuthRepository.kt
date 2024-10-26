@@ -63,9 +63,4 @@ class AuthRepository {
             }
     }
 
-
-    fun logoutUser(function: (Boolean, String) -> Unit) {
-        firebaseAuth.signOut()
-        function(true, "Logged Out Successfully")
-    }
 }

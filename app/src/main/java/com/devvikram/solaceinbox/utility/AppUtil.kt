@@ -1,9 +1,12 @@
 package com.devvikram.solaceinbox.utility
 
 import android.annotation.SuppressLint
+import android.util.Log
+import androidx.core.net.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 import java.util.TimeZone
 //date string in this format Sat Oct 12 13:03:04 GMT+05:30 2024
 
@@ -11,15 +14,22 @@ class AppUtil {
     companion object {
         @SuppressLint("SimpleDateFormat")
         fun getEmailDate(cDate: String): Date {
-
-            if(cDate.isEmpty()){
-                return Date()
+            return if (cDate.isEmpty()) {
+                Date()  // Return current date for empty strings
+            } else {
+                try {
+                    val sdf = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+                    sdf.timeZone = TimeZone.getDefault()  // Use device's default time zone
+                    val parsedDate = sdf.parse(cDate)!!
+                    Log.d("GetEmailDate", "Parsed Date: $parsedDate")
+                    return parsedDate
+                } catch (e: ParseException) {
+                    Log.e("GetEmailDate", "Error parsing date: ${e.message}")
+                    Date()  // Fallback to current date in case of a parsing error
+                }
             }
-            val sdf = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy")
-            sdf.timeZone = TimeZone.getTimeZone("UTC")
-            return sdf.parse(cDate)!!
-
         }
+
 
         @SuppressLint("SimpleDateFormat")
         fun getTimeFromDate(cDate: String): String {
