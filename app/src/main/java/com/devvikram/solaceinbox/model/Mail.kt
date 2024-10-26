@@ -13,5 +13,6 @@ data class Mail(
     val recipients: ArrayList<UserModel> = ArrayList(),
     val body: String = "",
     var cDate: String = "",
-    val attachments: MutableList<Attachment> = mutableListOf()
+    val attachments: MutableList<Attachment> = mutableListOf(),
+    val type : String = ""
 ) : Parcelable

@@ -66,7 +66,6 @@ class MainActivity : AppCompatActivity() {
         menuItems.add(NavItemModel("Trash", R.drawable.baseline_delete_24, false, 0))
 
         menuRecyclerView.layoutManager = LinearLayoutManager(this)
-        //item decorator
         menuRecyclerView.addItemDecoration(
             DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         )
@@ -85,15 +84,12 @@ class MainActivity : AppCompatActivity() {
                             )
                         }
                         "Sent" -> {
-                            // TODO: Sent fragment
                             replaceFragment(InternalMailsFragment())
                         }
                         "Drafts" -> {
-                            // TODO: Drafts fragment
                             replaceFragment(ExternalMailsFragment())
                         }
                         "Trash" -> {
-                            // TODO: Trash fragment
                             replaceFragment(ProfileFragment())
                         }
                     }

@@ -1,6 +1,5 @@
 package com.devvikram.solaceinbox.adapter
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
@@ -9,115 +8,150 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-
 import com.bumptech.glide.Glide
 import com.devvikram.solaceinbox.R
 import com.devvikram.solaceinbox.activities.EmailDetailActivity
+import com.devvikram.solaceinbox.databinding.ItemEmaiDraftLayoutBinding
+import com.devvikram.solaceinbox.databinding.ItemEmaiSentLayoutBinding
 import com.devvikram.solaceinbox.databinding.ItemEmailLayoutBinding
 import com.devvikram.solaceinbox.model.Mail
 import com.devvikram.solaceinbox.utility.AppUtil
-import java.util.ArrayList
 
 class EmailAdapter(private val activity: Activity, private val emailList: MutableList<Mail>) :
-    RecyclerView.Adapter<EmailAdapter.EmailViewHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    class EmailViewHolder(val binding: ItemEmailLayoutBinding, private val activity: Activity) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(email: Mail) {
-
-            Log.d("TAG", "EmailBind: ${email.senderName} to ${email.senderId}, ${email.subject}")
-
+    class InboxViewHolder(
+        private val binding: ItemEmailLayoutBinding,
+        private val activity: Activity
+    ) : BaseEmailViewHolder(binding.root) {
+        override fun bind(email: Mail) {
+            Log.d("TAG", "InboxEmailBind: ${email.senderName}")
             binding.tvSender.text = email.senderName
+            binding.tvSubject.text = email.subject
+            binding.tvBodySnippet.text = email.body
             binding.tvTimestamp.text = AppUtil.getTimeFromDate(email.cDate)
 
-            when {
-                AppUtil.isToday(email.cDate) -> {
-                    Log.d("EmailTimestamp", "Email is from today: ${email.cDate}")/**/
+            loadProfileImage(binding, email)
 
-                    binding.tvTimestamp.visibility = View.GONE
-                    binding.tvTimestampText.text = AppUtil.getTimeAgoString(email.cDate)
-                }
-
-                AppUtil.isYesterday(email.cDate) -> {
-                    Log.d("EmailTimestamp", "Email is from yesterday: ${email.cDate}")
-
-                    binding.tvTimestamp.text = AppUtil.getDateInDmy(email.cDate)
-                    binding.tvTimestampText.visibility = View.GONE
-                }
-
-                else -> {
-                    Log.d("EmailTimestamp", "Email is older: ${email.cDate}")
-
-                    binding.tvTimestamp.visibility = View.GONE
-                    binding.tvTimestampText.text = AppUtil.getDateInDmy(email.cDate)
-                }
+            binding.root.setOnClickListener {
+                startEmailDetailActivity(email)
             }
+        }
 
-            binding.tvBodySnippet.maxLines = 2
-            binding.tvSubject.text = email.subject.ifEmpty { "(no subject)" }
-            binding.tvBodySnippet.text = email.body.ifEmpty { "" }
-            binding.tvBodySnippet.visibility =
-                if (email.body.isEmpty()) View.GONE else View.VISIBLE
+        private fun loadProfileImage(binding: ItemEmailLayoutBinding, email: Mail) {
             val profileUrl = ""
-
             if (profileUrl.isEmpty()) {
                 binding.profileImage.visibility = View.GONE
                 binding.noProfileLayout.visibility = View.VISIBLE
-                val firstLetter = if (email.senderName.isNotEmpty()) {
-                    email.senderName.first().toString()
-                } else {
-                    "?"
-                }
-                binding.firstLetterTextView.text = firstLetter
-
-                val colors = arrayOf(
-                    R.color.purple_light_2,
-                    R.color.yellow_light_2,
-                    R.color.teal_light_2,
-                    R.color.cyan_light_2,
-                    R.color.pink_light_2,
-                    R.color.brown_light_2
+                binding.firstLetterTextView.text = email.senderName.firstOrNull()?.toString() ?: "?"
+                binding.subCatIcon.setBackgroundColor(
+                    ContextCompat.getColor(activity, R.color.purple_light_2)
                 )
-                val randomColor = colors.random()
-                binding.subCatIcon.setBackgroundColor(ContextCompat.getColor(activity, randomColor))
-
             } else {
                 binding.profileImage.visibility = View.VISIBLE
                 binding.noProfileLayout.visibility = View.GONE
                 Glide.with(activity)
-                    .load("https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg")
-                    .placeholder(R.drawable.baseline_person_24).into(binding.profileImage)
-//
-            }
-
-
-            itemView.setOnClickListener {
-                activity.startActivity(Intent(activity, EmailDetailActivity::class.java).apply {
-                    putExtra("email", email)
-                })
+                    .load(profileUrl)
+                    .placeholder(R.drawable.baseline_person_24)
+                    .into(binding.profileImage)
             }
         }
 
-
+        private fun startEmailDetailActivity(email: Mail) {
+            activity.startActivity(Intent(activity, EmailDetailActivity::class.java).apply {
+                putExtra("email", email)
+            })
+        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmailViewHolder {
+    // ViewHolder for Sent
+    class SentViewHolder(
+        private val binding: ItemEmaiSentLayoutBinding,
+        private val activity: Activity
+    ) : BaseEmailViewHolder(binding.root) {
+        override fun bind(email: Mail) {
+            Log.d("TAG", "SentEmailBind: ${email.senderName}")
+            binding.tvRecipient.text = email.recipients[0].email
+            binding.tvSubject.text = email.subject
+            binding.tvTimestamp.text = AppUtil.getTimeFromDate(email.cDate)
 
-        val binding = ItemEmailLayoutBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-        return EmailViewHolder(binding, activity)
+            binding.root.setOnClickListener {
+                startEmailDetailActivity(email)
+            }
+        }
 
-
+        private fun startEmailDetailActivity(email: Mail) {
+            activity.startActivity(Intent(activity, EmailDetailActivity::class.java).apply {
+                putExtra("email", email)
+            })
+        }
     }
 
-    @SuppressLint("SetTextI18n")
-    override fun onBindViewHolder(holder: EmailViewHolder, position: Int) {
+    // ViewHolder for Draft
+    class DraftViewHolder(
+        private val binding: ItemEmaiDraftLayoutBinding,
+        private val activity: Activity
+    ) : BaseEmailViewHolder(binding.root) {
+        override fun bind(email: Mail) {
+            Log.d("TAG", "DraftEmailBind: ${email.senderName}")
+            binding.tvSubject.text = email.subject.ifEmpty { "(no subject)" }
+            binding.tvTimestamp.text = AppUtil.getTimeFromDate(email.cDate)
+
+            binding.root.setOnClickListener {
+                startEmailDetailActivity(email)
+            }
+        }
+
+        private fun startEmailDetailActivity(email: Mail) {
+            activity.startActivity(Intent(activity, EmailDetailActivity::class.java).apply {
+                putExtra("email", email)
+            })
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            INBOX_TYPE -> {
+                val binding = ItemEmailLayoutBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+                InboxViewHolder(binding, activity)
+            }
+
+            SENT_TYPE -> {
+                val binding = ItemEmaiSentLayoutBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+                SentViewHolder(binding, activity)
+            }
+
+            DRAFT_TYPE -> {
+                val binding = ItemEmaiDraftLayoutBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+                DraftViewHolder(binding, activity)
+            }
+
+            else -> throw IllegalArgumentException("Unknown view type")
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val email = emailList[position]
-        holder.bind(email)
+        when (holder) {
+            is InboxViewHolder -> holder.bind(email)
+            is SentViewHolder -> holder.bind(email)
+            is DraftViewHolder -> holder.bind(email)
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (emailList[position].type) {
+            "0" -> INBOX_TYPE
+            "1" -> SENT_TYPE
+            "2" -> DRAFT_TYPE
+            else -> throw IllegalArgumentException("Unknown email type")
+        }
     }
 
 
@@ -125,10 +159,14 @@ class EmailAdapter(private val activity: Activity, private val emailList: Mutabl
         return emailList.size
     }
 
-    fun updateEmails(mails: ArrayList<Mail>) {
-        emailList.clear()
-        emailList.addAll(mails)
-        notifyDataSetChanged()
+
+    abstract class BaseEmailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        abstract fun bind(email: Mail)
     }
 
+    companion object {
+        const val INBOX_TYPE = 0
+        const val SENT_TYPE = 1
+        const val DRAFT_TYPE = 2
+    }
 }

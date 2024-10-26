@@ -25,31 +25,15 @@ class AllMailViewModel(
      fun fetchAllMails() {
         viewModelScope.launch {
             repository.getAllMails { mailArrayList: ArrayList<Mail>, message: String ->
-                // Log the complete list of emails before filtering
-                Log.d("TAG", "fetchAllMails: Unfiltered mail list: $mailArrayList")
-                Log.d("TAG", "fetchAllMails: Unfiltered mail count: ${mailArrayList.size}")
 
                 if (mailArrayList.isNotEmpty()) {
-                    // Log the current user ID
-                    Log.d("TAG", "Current User ID: $currentUserId")
-
                     val filteredMails = mailArrayList.filter { mail ->
-                        // Log the mail ID and its recipients
-                        Log.d("TAG", "Checking Mail ID: ${mail.id} with Recipients: ${mail.recipients.joinToString { it.userId }}")
-
-                        // Check if any recipient matches the current user ID
                         mail.recipients.any { recipient ->
                             val isRecipient = recipient.userId == currentUserId
                             Log.d("FilteredMailsLog", "Mail ID: ${mail.id}, Recipient ID: ${recipient.userId}, Is Match: $isRecipient")
                             isRecipient
                         }
                     }
-
-// Log the filtered list of emails
-                    Log.d("TAG", "fetchAllMails: Filtered mail list: $filteredMails")
-                    Log.d("TAG", "fetchAllMails: Filtered mail count: ${filteredMails.size}")
-
-
                     _allMails.value =
                         MailState(
                             mails = filteredMails as ArrayList<Mail>,
@@ -64,9 +48,6 @@ class AllMailViewModel(
         }
     }
 
-    fun resetState() {
-        _allMails.value = MailState()
-    }
     data class MailState(
         val isLoading: Boolean = false,
         val status: Boolean = false,
@@ -75,5 +56,4 @@ class AllMailViewModel(
         val isSuccessful: Boolean = false,
         val isFailure: Boolean = false,
     )
-
 }
