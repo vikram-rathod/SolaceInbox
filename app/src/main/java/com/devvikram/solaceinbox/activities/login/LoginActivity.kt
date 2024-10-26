@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.devvikram.solaceinbox.MainActivity
 import com.devvikram.solaceinbox.constant.MyApplication
+import com.devvikram.solaceinbox.constant.SharedPreference
 import com.devvikram.solaceinbox.databinding.ActivityLoginBinding
 import com.devvikram.solaceinbox.model.UserModel
 
@@ -15,15 +16,17 @@ class LoginActivity : AppCompatActivity() {
     private val authViewModel: AuthViewModel by lazy {
         (application as MyApplication).authViewModel
     }
+    private lateinit var sharePreferences: SharedPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Log.d("TAG", "onCreate: ${authViewModel.isLoggedIn()}")
-       if(authViewModel.isLoggedIn()){
+        sharePreferences = SharedPreference(this)
+        Log.d("TAG", "onCreate: logged in status ${sharePreferences.isLoggedIn()}")
+       if(sharePreferences.isLoggedIn()){
            startActivity(Intent(this, MainActivity::class.java))
-           finish()
+           finishAffinity()
            return
        }
         binding.loginButton.setOnClickListener {
@@ -38,13 +41,24 @@ class LoginActivity : AppCompatActivity() {
         }
 
         authViewModel.loginState.observe(this) {
-            if (it.isLoading) {
-                showProgress()
-            } else if (it.isSuccessful) {
-               hideProgress()
-                startActivity(Intent(this, MainActivity::class.java))
-            } else if (it.isFailure) {
-                showErrorMessage(it.message)
+            when (it) {
+                is AuthViewModel.AuthState.Loading -> {
+                    showProgress()
+                }
+                is AuthViewModel.AuthState.Success -> {
+                    hideProgress()
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finishAffinity()
+
+                }
+                is AuthViewModel.AuthState.Error -> {
+                    hideProgress()
+                    showErrorMessage(it.message)
+                }
+                null -> {
+                    hideProgress()
+                }
             }
         }
 

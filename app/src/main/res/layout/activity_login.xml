@@ -13,7 +13,7 @@
     <ImageView
         android:id="@+id/logo_image"
         android:layout_width="150dp"
-        android:layout_height="220dp"
+        android:layout_height="100dp"
         android:layout_marginBottom="24dp"
         android:contentDescription="App Logo"
         android:background="@color/white"

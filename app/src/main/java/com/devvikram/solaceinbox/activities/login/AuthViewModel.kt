@@ -7,45 +7,36 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devvikram.solaceinbox.constant.SharedPreference
 import com.devvikram.solaceinbox.model.UserModel
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class AuthViewModel(private val authRepository: AuthRepository, context: Context) :
     ViewModel() {
+    private val firebaseAuth = FirebaseAuth.getInstance()
 
     private val sharedPreference = SharedPreference(context)
     val currentUser = sharedPreference.getUser()
 
     //    register state
-    private val _registerState = MutableLiveData<AuthState>()
-    val registerState: LiveData<AuthState> = _registerState
+    private val _registerState = MutableLiveData<AuthState?>()
+    val registerState: MutableLiveData<AuthState?> = _registerState
 
     //    login state
-    private val _loginState = MutableLiveData<AuthState>()
-    val loginState: LiveData<AuthState> = _loginState
-
-    //    logout state
-    private val _logoutState = MutableLiveData<AuthState>()
-    val logoutState: LiveData<AuthState> = _logoutState
+    private val _loginState = MutableLiveData<AuthState?>(null)
+    val loginState: LiveData<AuthState?> = _loginState
 
     fun loginUser(userModel: UserModel) {
         viewModelScope.launch {
-            _loginState.value = AuthState(isLoading = true)
+            _loginState.value = AuthState.Loading
             authRepository.loginUser(userModel) { status: Boolean, message: String, userModel: UserModel ->
-                if (status) {
+                if(status){
                     saveUser(userModel)
-                    _loginState.value =
-                        AuthState(
-                            status = true,
-                            isLoggedIn = true,
-                            user = userModel,
-                            isSuccessful = true
-                        )
-
-                } else {
-                    _loginState.value =
-                        AuthState(status = false, message = message, isFailure = true)
+                    _loginState.value = AuthState.Success(userModel)
+                }else{
+                    _loginState.value = AuthState.Error(message)
                 }
             }
+
         }
     }
 
@@ -57,43 +48,42 @@ class AuthViewModel(private val authRepository: AuthRepository, context: Context
         return sharedPreference.getUser()
     }
 
-    fun isLoggedIn(): Boolean {
-        return sharedPreference.isLoggedIn()
-    }
 
     fun registerUser(userModel: UserModel) {
         viewModelScope.launch {
-            _registerState.value = AuthState(isLoading = true)
+            _registerState.value = AuthState.Loading
             authRepository.registerUser(userModel) { status: Boolean, message: String ->
                 if (status) {
-                    _registerState.value =
-                        AuthState(status = true, message = message, isSuccessful = true)
+                    _registerState.value = AuthState.Success(userModel)
                 } else {
-                    _registerState.value =
-                        AuthState(status = false, message = message, isFailure = true)
+                    _registerState.value = AuthState.Error(message)
                 }
             }
         }
 
     }
 
+    // Logout user function
     fun logoutUser() {
-        viewModelScope.launch {
-            authRepository.logoutUser { status: Boolean, message: String ->
-                sharedPreference.clear()
-                _logoutState.value = AuthState(isLoggedIn = false, isSuccessful = true)
-            }
-        }
+        firebaseAuth.signOut()
+        clearUserData()
+    }
+    private fun resetState() {
+        _registerState.value = null
+        _loginState.value = null
+
+    }
+
+    private fun clearUserData() {
+        sharedPreference.clearData()
+        resetState()
     }
 
 
-    data class AuthState(
-        val isLoading: Boolean = false,
-        val status: Boolean = false,
-        val message: String = "",
-        val isSuccessful: Boolean = false,
-        val isFailure: Boolean = false,
-        val user: UserModel? = UserModel(),
-        val isLoggedIn: Boolean = false
-    )
+    sealed class AuthState(){
+        data object Loading : AuthState()
+        data class Success(val user: UserModel) : AuthState()
+        data class Error(val message: String) : AuthState()
+    }
+
 }

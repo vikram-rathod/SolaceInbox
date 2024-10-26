@@ -2,6 +2,7 @@ package com.devvikram.solaceinbox.adapter
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.bumptech.glide.Glide
 import com.devvikram.solaceinbox.R
+import com.devvikram.solaceinbox.activities.EmailDetailActivity
 import com.devvikram.solaceinbox.databinding.ItemEmailLayoutBinding
 import com.devvikram.solaceinbox.model.Mail
 import com.devvikram.solaceinbox.utility.AppUtil
+import java.util.ArrayList
 
 class EmailAdapter(private val activity: Activity, private val emailList: MutableList<Mail>) :
     RecyclerView.Adapter<EmailAdapter.EmailViewHolder>() {
@@ -22,6 +25,9 @@ class EmailAdapter(private val activity: Activity, private val emailList: Mutabl
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(email: Mail) {
+
+            Log.d("TAG", "EmailBind: ${email.senderName} to ${email.senderId}, ${email.subject}")
+
             binding.tvSender.text = email.senderName
             binding.tvTimestamp.text = AppUtil.getTimeFromDate(email.cDate)
 
@@ -86,11 +92,11 @@ class EmailAdapter(private val activity: Activity, private val emailList: Mutabl
             }
 
 
-//            itemView.setOnClickListener {
-//                activity.startActivity(Intent(activity, EmailDetailActivity::class.java).apply {
-//                    putExtra("email", email)
-//                })
-//            }
+            itemView.setOnClickListener {
+                activity.startActivity(Intent(activity, EmailDetailActivity::class.java).apply {
+                    putExtra("email", email)
+                })
+            }
         }
 
 
@@ -117,6 +123,12 @@ class EmailAdapter(private val activity: Activity, private val emailList: Mutabl
 
     override fun getItemCount(): Int {
         return emailList.size
+    }
+
+    fun updateEmails(mails: ArrayList<Mail>) {
+        emailList.clear()
+        emailList.addAll(mails)
+        notifyDataSetChanged()
     }
 
 }

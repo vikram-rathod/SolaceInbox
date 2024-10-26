@@ -27,16 +27,6 @@ class SharedPreference(context: Context) {
         )
     }
 
-    fun clear() {
-        with(sharedPreferences.edit()) {
-            remove(USER_ID)
-            remove(USER_NAME)
-            remove(USER_EMAIL)
-            remove(USER_MOBILE)
-            putBoolean(IS_LOGGED_IN,false)
-            apply()
-        }
-    }
 
     fun isLoggedIn(): Boolean {
         return sharedPreferences.getBoolean(IS_LOGGED_IN, false)
@@ -45,6 +35,19 @@ class SharedPreference(context: Context) {
     fun getUserName(): String {
         return sharedPreferences.getString(USER_NAME, "").toString()
     }
+    fun getUserEmail(): String {
+        return sharedPreferences.getString(USER_EMAIL, "").toString()
+    }
+    fun getCurrentUserId(): String {
+        return sharedPreferences.getString(USER_ID, "").toString()
+    }
+
+    fun clearData() {
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
+    }
+
 
     companion object {
         const val SHARED_PREF_NAME = "solace_inbox_shared_pref"
